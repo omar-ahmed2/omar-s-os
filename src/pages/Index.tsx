@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import BootSequence from '@/components/BootSequence';
 import ParticleBackground from '@/components/ParticleBackground';
-import CustomCursor from '@/components/CustomCursor';
+
 import DesktopIcon from '@/components/DesktopIcon';
 import Taskbar from '@/components/Taskbar';
 import OSWindow from '@/components/OSWindow';
@@ -126,7 +126,7 @@ const Index = () => {
       <div className="grid-bg fixed inset-0 z-[1]" />
       <div className="scanlines" />
       <div className="noise-overlay" />
-      <CustomCursor />
+      
 
       {/* Watermark */}
       <div className="fixed inset-0 z-[2] flex items-center justify-center pointer-events-none select-none">
