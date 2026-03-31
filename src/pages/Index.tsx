@@ -126,7 +126,7 @@ const Index = () => {
       <div className="grid-bg fixed inset-0 z-[1]" />
       <div className="scanlines" />
       <div className="noise-overlay" />
-      <CustomCursor />
+      
 
       {/* Watermark */}
       <div className="fixed inset-0 z-[2] flex items-center justify-center pointer-events-none select-none">
