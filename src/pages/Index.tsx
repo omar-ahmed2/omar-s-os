@@ -152,7 +152,7 @@ const Index = () => {
 
       {/* Windows */}
       {booted && (
-        <div className="fixed inset-0 z-20">
+        <div className="fixed inset-0 z-20 pointer-events-none">
           {(Object.keys(windows) as WindowId[]).map(id => (
               <OSWindow
                 key={id}
