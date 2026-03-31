@@ -172,7 +172,6 @@ const Index = () => {
                 {windowContents[id]}
               </OSWindow>
             ))}
-          </div>
         </div>
       )}
 
