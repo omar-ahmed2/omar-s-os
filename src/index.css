@@ -54,17 +54,7 @@
   }
 }
 
-/* Custom cursor */
-.custom-cursor {
-  position: fixed;
-  pointer-events: none;
-  z-index: 99999;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--accent-cyan);
-  font-size: 18px;
-  text-shadow: var(--glow-cyan);
-  animation: cursor-blink 1s step-end infinite;
-}
+
 
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
