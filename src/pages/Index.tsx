@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import BootSequence from '@/components/BootSequence';
 import ParticleBackground from '@/components/ParticleBackground';
-import CustomCursor from '@/components/CustomCursor';
+
 import DesktopIcon from '@/components/DesktopIcon';
 import Taskbar from '@/components/Taskbar';
 import OSWindow from '@/components/OSWindow';
