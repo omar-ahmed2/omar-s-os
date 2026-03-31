@@ -153,8 +153,7 @@ const Index = () => {
       {/* Windows */}
       {booted && (
         <div className="fixed inset-0 z-20 pointer-events-none">
-          <div className="w-full h-full pointer-events-auto">
-            {(Object.keys(windows) as WindowId[]).map(id => (
+          {(Object.keys(windows) as WindowId[]).map(id => (
               <OSWindow
                 key={id}
                 id={id}
@@ -173,7 +172,6 @@ const Index = () => {
                 {windowContents[id]}
               </OSWindow>
             ))}
-          </div>
         </div>
       )}
 

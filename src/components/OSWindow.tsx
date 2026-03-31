@@ -41,7 +41,7 @@ const OSWindow = ({
       exit={{ scale: 0.85, opacity: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       ref={nodeRef}
-      className="glass rounded-lg overflow-hidden flex flex-col shadow-2xl"
+      className="glass rounded-lg overflow-hidden flex flex-col shadow-2xl pointer-events-auto"
       style={{ ...windowStyle, zIndex, willChange: 'transform' }}
       onMouseDown={handleMouseDown}
     >
