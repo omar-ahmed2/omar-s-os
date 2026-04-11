@@ -23,20 +23,20 @@ interface WindowState {
 }
 
 const defaultPositions: Record<WindowId, { x: number; y: number }> = {
-  about: { x: 180, y: 40 },
-  projects: { x: 250, y: 60 },
-  skills: { x: 200, y: 80 },
-  experience: { x: 300, y: 50 },
-  contact: { x: 350, y: 70 },
-  terminal: { x: 220, y: 90 },
+  about: { x: 140, y: 30 },
+  projects: { x: 200, y: 50 },
+  skills: { x: 160, y: 70 },
+  experience: { x: 260, y: 40 },
+  contact: { x: 300, y: 60 },
+  terminal: { x: 180, y: 80 },
 };
 
 const defaultSizes: Record<WindowId, { width: number; height: number }> = {
-  about: { width: 620, height: 500 },
-  projects: { width: 750, height: 540 },
-  skills: { width: 720, height: 480 },
-  experience: { width: 660, height: 520 },
-  contact: { width: 520, height: 540 },
+  about: { width: 600, height: 520 },
+  projects: { width: 720, height: 520 },
+  skills: { width: 700, height: 480 },
+  experience: { width: 640, height: 500 },
+  contact: { width: 650, height: 520 },
   terminal: { width: 680, height: 440 },
 };
 
@@ -64,13 +64,16 @@ const Index = () => {
   });
 
   const openWindow = useCallback((id: WindowId) => {
-    setZCounter(z => z + 1);
-    setWindows(prev => ({
-      ...prev,
-      [id]: { ...prev[id], isOpen: true, isMinimized: false, zIndex: zCounter + 1 },
-    }));
+    setZCounter(z => {
+      const newZ = z + 1;
+      setWindows(prev => ({
+        ...prev,
+        [id]: { ...prev[id], isOpen: true, isMinimized: false, zIndex: newZ },
+      }));
+      return newZ;
+    });
     setActiveWindow(id);
-  }, [zCounter]);
+  }, []);
 
   const closeWindow = useCallback((id: WindowId) => {
     setWindows(prev => ({ ...prev, [id]: { ...prev[id], isOpen: false, isMinimized: false, isMaximized: false } }));
@@ -87,25 +90,40 @@ const Index = () => {
   }, []);
 
   const focusWindow = useCallback((id: WindowId) => {
-    setZCounter(z => z + 1);
-    setWindows(prev => ({ ...prev, [id]: { ...prev[id], zIndex: zCounter + 1 } }));
+    setZCounter(z => {
+      const newZ = z + 1;
+      setWindows(prev => ({ ...prev, [id]: { ...prev[id], zIndex: newZ } }));
+      return newZ;
+    });
     setActiveWindow(id);
-  }, [zCounter]);
+  }, []);
 
   const handleTaskbarClick = useCallback((id: string) => {
     const wid = id as WindowId;
-    const win = windows[wid];
-    if (!win) return;
-    if (win.isMinimized) {
-      setZCounter(z => z + 1);
-      setWindows(prev => ({ ...prev, [wid]: { ...prev[wid], isMinimized: false, zIndex: zCounter + 1 } }));
-      setActiveWindow(wid);
-    } else if (activeWindow === wid) {
-      minimizeWindow(wid);
-    } else {
-      focusWindow(wid);
+    setWindows(prev => {
+      const win = prev[wid];
+      if (!win) return prev;
+      if (win.isMinimized) {
+        setZCounter(z => {
+          const newZ = z + 1;
+          setWindows(p => ({ ...p, [wid]: { ...p[wid], isMinimized: false, zIndex: newZ } }));
+          return newZ;
+        });
+        setActiveWindow(wid);
+        return prev;
+      }
+      return prev;
+    });
+    // If not minimized, check if active
+    const win = windows[id as WindowId];
+    if (win && !win.isMinimized) {
+      if (activeWindow === id) {
+        minimizeWindow(id as WindowId);
+      } else {
+        focusWindow(id as WindowId);
+      }
     }
-  }, [windows, activeWindow, zCounter, minimizeWindow, focusWindow]);
+  }, [windows, activeWindow, minimizeWindow, focusWindow]);
 
   const openWindows = Object.entries(windows).filter(([, w]) => w.isOpen).map(([id]) => id);
 
@@ -119,7 +137,7 @@ const Index = () => {
   };
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ background: '#050a0e' }}>
+    <div className="fixed inset-0 overflow-hidden" style={{ background: '#020508' }}>
       {!booted && <BootSequence onComplete={() => setBooted(true)} />}
 
       <ParticleBackground />
@@ -127,10 +145,18 @@ const Index = () => {
       <div className="scanlines" />
       <div className="noise-overlay" />
 
+      {/* Corner decorations */}
+      <div className="fixed top-3 left-3 z-[3] pointer-events-none font-mono text-[8px] text-os-cyan/15 tracking-widest">
+        SYS://omar-os/desktop
+      </div>
+      <div className="fixed top-3 right-3 z-[3] pointer-events-none font-mono text-[8px] text-os-cyan/15 tracking-widest">
+        v2.0.26
+      </div>
+
       {/* Watermark */}
       <div className="fixed inset-0 z-[2] flex items-center justify-center pointer-events-none select-none">
-        <span className="font-heading text-[12vw] font-bold text-os-cyan/[0.03] -rotate-[15deg] tracking-widest">
-          OMAR.DEV
+        <span className="font-heading text-[14vw] font-bold text-os-cyan/[0.02] -rotate-[15deg] tracking-[0.2em]">
+          OMAR
         </span>
       </div>
 
@@ -139,7 +165,7 @@ const Index = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
           className={`fixed z-10 ${isMobile ? 'bottom-16 left-0 right-0 flex justify-center gap-1 px-2 flex-wrap' : 'left-4 top-8 flex flex-col gap-0.5'}`}
         >
           {icons.map((icon, i) => (
@@ -148,7 +174,7 @@ const Index = () => {
               icon={icon.icon}
               label={icon.label}
               onClick={() => openWindow(icon.id)}
-              delay={0.3 + i * 0.08}
+              delay={0.2 + i * 0.07}
             />
           ))}
         </motion.div>
