@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import BootSequence from '@/components/BootSequence';
 import ParticleBackground from '@/components/ParticleBackground';
-
 import DesktopIcon from '@/components/DesktopIcon';
 import Taskbar from '@/components/Taskbar';
 import OSWindow from '@/components/OSWindow';
@@ -32,12 +32,12 @@ const defaultPositions: Record<WindowId, { x: number; y: number }> = {
 };
 
 const defaultSizes: Record<WindowId, { width: number; height: number }> = {
-  about: { width: 600, height: 480 },
-  projects: { width: 750, height: 520 },
-  skills: { width: 720, height: 460 },
-  experience: { width: 650, height: 500 },
-  contact: { width: 500, height: 520 },
-  terminal: { width: 650, height: 420 },
+  about: { width: 620, height: 500 },
+  projects: { width: 750, height: 540 },
+  skills: { width: 720, height: 480 },
+  experience: { width: 660, height: 520 },
+  contact: { width: 520, height: 540 },
+  terminal: { width: 680, height: 440 },
 };
 
 const icons: { id: WindowId; icon: string; label: string }[] = [
@@ -126,52 +126,56 @@ const Index = () => {
       <div className="grid-bg fixed inset-0 z-[1]" />
       <div className="scanlines" />
       <div className="noise-overlay" />
-      
 
       {/* Watermark */}
       <div className="fixed inset-0 z-[2] flex items-center justify-center pointer-events-none select-none">
-        <span className="font-heading text-[12vw] font-bold text-os-cyan/[0.03] -rotate-[15deg]">
+        <span className="font-heading text-[12vw] font-bold text-os-cyan/[0.03] -rotate-[15deg] tracking-widest">
           OMAR.DEV
         </span>
       </div>
 
       {/* Desktop Icons */}
       {booted && (
-        <div className={`fixed z-10 ${isMobile ? 'bottom-16 left-0 right-0 flex justify-center gap-2 px-2' : 'left-4 top-8 flex flex-col gap-1'}`}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className={`fixed z-10 ${isMobile ? 'bottom-16 left-0 right-0 flex justify-center gap-1 px-2 flex-wrap' : 'left-4 top-8 flex flex-col gap-0.5'}`}
+        >
           {icons.map((icon, i) => (
             <DesktopIcon
               key={icon.id}
               icon={icon.icon}
               label={icon.label}
               onClick={() => openWindow(icon.id)}
-              delay={i * 0.1}
+              delay={0.3 + i * 0.08}
             />
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Windows */}
       {booted && (
         <div className="fixed inset-0 z-20 pointer-events-none">
           {(Object.keys(windows) as WindowId[]).map(id => (
-              <OSWindow
-                key={id}
-                id={id}
-                title={id}
-                isOpen={windows[id].isOpen}
-                isMinimized={windows[id].isMinimized}
-                isMaximized={windows[id].isMaximized}
-                zIndex={windows[id].zIndex}
-                onClose={() => closeWindow(id)}
-                onMinimize={() => minimizeWindow(id)}
-                onMaximize={() => maximizeWindow(id)}
-                onFocus={() => focusWindow(id)}
-                defaultPosition={defaultPositions[id]}
-                defaultSize={defaultSizes[id]}
-              >
-                {windowContents[id]}
-              </OSWindow>
-            ))}
+            <OSWindow
+              key={id}
+              id={id}
+              title={id}
+              isOpen={windows[id].isOpen}
+              isMinimized={windows[id].isMinimized}
+              isMaximized={windows[id].isMaximized}
+              zIndex={windows[id].zIndex}
+              onClose={() => closeWindow(id)}
+              onMinimize={() => minimizeWindow(id)}
+              onMaximize={() => maximizeWindow(id)}
+              onFocus={() => focusWindow(id)}
+              defaultPosition={defaultPositions[id]}
+              defaultSize={defaultSizes[id]}
+            >
+              {windowContents[id]}
+            </OSWindow>
+          ))}
         </div>
       )}
 
