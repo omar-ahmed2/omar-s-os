@@ -12,7 +12,6 @@ import ExperienceContent from '@/components/ExperienceContent';
 import ProjectsContent from '@/components/ProjectsContent';
 import ContactContent from '@/components/ContactContent';
 import TerminalContent from '@/components/TerminalContent';
-import DesktopContextMenu from '@/components/DesktopContextMenu';
 import NotificationToast, { ToastMessage } from '@/components/NotificationToast';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -52,7 +51,7 @@ const windowOpenMessages: Record<WindowId, { message: string; subtext?: string; 
   terminal:   { message: 'Root session started',    subtext: 'User: OMAR_OS',              type: 'info',   icon: '>_' },
 };
 
-// ── Background Floating Orbs ──────────────────────────────────────────
+// ── Background Floating Orbs ──────────────────────────────
 const AmbientOrbs = () => (
   <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
     <motion.div
@@ -93,7 +92,6 @@ const Index = () => {
   const [zCounter, setZCounter] = useState(10);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
   const isMobile = useIsMobile();
 
   const [windows, setWindows] = useState<Record<WindowId, WindowState>>({
@@ -189,11 +187,6 @@ const Index = () => {
     return () => window.removeEventListener('keydown', handler);
   }, [booted, openWindow]);
 
-  const handleContextMenu = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setContextMenu({ visible: true, x: e.clientX, y: e.clientY });
-  }, []);
-
   const handleDownloadCV = useCallback(() => {
     addToast({ message: 'Initiating transfer...', subtext: 'Omar_Ahmed_CV.pdf', type: 'success', icon: '📥' });
     const a = document.createElement('a');
@@ -228,7 +221,6 @@ const Index = () => {
     <div
       className="fixed inset-0 overflow-hidden select-none crt-flicker"
       style={{ background: '#020508' }}
-      onContextMenu={handleContextMenu}
     >
       {!booted && <BootSequence onComplete={handleBooted} />}
 
@@ -318,15 +310,6 @@ const Index = () => {
           onWindowClick={handleTaskbarClick}
         />
       )}
-
-      <DesktopContextMenu
-        x={contextMenu.x}
-        y={contextMenu.y}
-        visible={contextMenu.visible}
-        onClose={() => setContextMenu(m => ({ ...m, visible: false }))}
-        onOpen={id => openWindow(id as WindowId)}
-        onDownloadCV={handleDownloadCV}
-      />
 
       <NotificationToast toasts={toasts} onRemove={removeToast} />
     </div>

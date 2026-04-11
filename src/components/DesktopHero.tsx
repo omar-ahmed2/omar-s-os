@@ -166,7 +166,7 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
           className="flex items-center justify-between px-5 py-2"
           style={{ background: 'rgba(3,8,18,0.4)', borderTop: '1px solid rgba(0,212,255,0.05)' }}
         >
-          <span className="font-mono text-[8px] text-os-muted/30">Double-click icons to open · Right-click for menu</span>
+          <span className="font-mono text-[8px] text-os-muted/30">Select apps to launch · Neural interface active</span>
           <span className="font-mono text-[8px] text-os-cyan/25">⌥1–5</span>
         </div>
       </div>
