@@ -52,40 +52,45 @@ const windowOpenMessages: Record<WindowId, { message: string; subtext?: string; 
 };
 
 // ── Background Floating Orbs ──────────────────────────────
-const AmbientOrbs = () => (
-  <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-    <motion.div
-      animate={{
-        x: [0, 100, -50, 0],
-        y: [0, -80, 40, 0],
-        scale: [1, 1.2, 0.9, 1],
-      }}
-      transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute -top-20 -left-20 w-[600px] h-[600px] rounded-full blur-[120px] opacity-[0.08]"
-      style={{ background: 'radial-gradient(circle, #00d4ff 0%, transparent 70%)' }}
-    />
-    <motion.div
-      animate={{
-        x: [0, -120, 80, 0],
-        y: [0, 60, -100, 0],
-        scale: [1, 1.1, 0.8, 1],
-      }}
-      transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-1/2 -right-40 w-[500px] h-[500px] rounded-full blur-[140px] opacity-[0.05]"
-      style={{ background: 'radial-gradient(circle, #00ff88 0%, transparent 70%)' }}
-    />
-    <motion.div
-      animate={{
-        x: [0, 40, -40, 0],
-        y: [0, -50, 30, 0],
-        scale: [1, 1.3, 1, 1],
-      }}
-      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute -bottom-40 left-1/4 w-[400px] h-[400px] rounded-full blur-[100px] opacity-[0.03]"
-      style={{ background: 'radial-gradient(circle, #ffb800 0%, transparent 70%)' }}
-    />
-  </div>
-);
+const AmbientOrbs = () => {
+  const isMobile = useIsMobile();
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <motion.div
+        animate={{
+          x: [0, 80, -40, 0],
+          y: [0, -60, 30, 0],
+        }}
+        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -top-20 -left-20 w-[400px] h-[400px] rounded-full blur-[100px] opacity-[0.06] will-change-transform"
+        style={{ background: 'radial-gradient(circle, #00d4ff 0%, transparent 70%)' }}
+      />
+      
+      {!isMobile && (
+        <>
+          <motion.div
+            animate={{
+              x: [0, -100, 60, 0],
+              y: [0, 50, -80, 0],
+            }}
+            transition={{ duration: 45, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/2 -right-40 w-[450px] h-[450px] rounded-full blur-[120px] opacity-[0.04] will-change-transform"
+            style={{ background: 'radial-gradient(circle, #00ff88 0%, transparent 70%)' }}
+          />
+          <motion.div
+            animate={{
+              x: [0, 30, -30, 0],
+              y: [0, -40, 20, 0],
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute -bottom-20 left-1/4 w-[350px] h-[350px] rounded-full blur-[80px] opacity-[0.02] will-change-transform"
+            style={{ background: 'radial-gradient(circle, #ffb800 0%, transparent 70%)' }}
+          />
+        </>
+      )}
+    </div>
+  );
+};
 
 const Index = () => {
   const [booted, setBooted] = useState(false);
@@ -219,7 +224,7 @@ const Index = () => {
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden select-none crt-flicker"
+      className="fixed inset-0 overflow-hidden select-none"
       style={{ background: '#020508' }}
     >
       {!booted && <BootSequence onComplete={handleBooted} />}
@@ -227,8 +232,8 @@ const Index = () => {
       <ParticleBackground />
       <AmbientOrbs />
       <div className="grid-bg fixed inset-0 z-[1]" />
-      <div className="scanlines" />
-      <div className="noise-overlay" />
+      <div className="scanlines crt-flicker" />
+      <div className="noise-overlay crt-flicker" />
 
       {/* ─── DESKTOP HUD ────────────────────────────────────────── */}
       <AnimatePresence>

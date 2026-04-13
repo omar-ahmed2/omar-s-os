@@ -46,31 +46,13 @@
 }
 
 @keyframes flicker {
-  0% { opacity: 0.97; }
-  5% { opacity: 0.95; }
-  10% { opacity: 0.9; }
-  15% { opacity: 0.98; }
-  20% { opacity: 0.93; }
-  25% { opacity: 0.95; }
-  30% { opacity: 0.9; }
-  35% { opacity: 0.97; }
-  40% { opacity: 0.93; }
-  45% { opacity: 0.92; }
-  50% { opacity: 0.95; }
-  55% { opacity: 0.91; }
-  60% { opacity: 0.98; }
-  65% { opacity: 0.93; }
-  70% { opacity: 0.95; }
-  75% { opacity: 0.92; }
-  80% { opacity: 0.97; }
-  85% { opacity: 0.95; }
-  90% { opacity: 0.98; }
-  95% { opacity: 0.94; }
-  100% { opacity: 0.99; }
+  0%, 100% { opacity: 1; }
+  33% { opacity: 0.98; }
+  66% { opacity: 0.99; }
 }
 
 .crt-flicker {
-  animation: var(--crt-flicker);
+  animation: flicker 2s infinite linear;
 }
 
 
@@ -176,8 +158,8 @@
 ══════════════════════════════════════ */
 .glass {
   background: var(--bg-glass);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 212, 255, 0.07);
 }
 

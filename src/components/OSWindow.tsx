@@ -73,8 +73,8 @@ const OSWindow = ({
         zIndex,
         willChange: 'transform',
         background: 'rgba(6, 14, 28, 0.93)',
-        backdropFilter: 'blur(32px)',
-        WebkitBackdropFilter: 'blur(32px)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         border: '1px solid rgba(0, 212, 255, 0.09)',
         boxShadow: isDragging
           ? '0 40px 90px -20px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 212, 255, 0.1)'

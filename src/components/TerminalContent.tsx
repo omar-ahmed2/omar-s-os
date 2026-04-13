@@ -280,15 +280,12 @@ const TerminalContent = () => {
 
       <div ref={scrollRef} className="flex-1 overflow-auto space-y-0.5 pb-2 scroll-smooth">
         {lines.map((line, i) => (
-          <motion.div
+          <div
             key={i}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.1 }}
             className={`${getLineColor(line.type)} whitespace-pre leading-relaxed`}
           >
             {line.text || '\u00A0'}
-          </motion.div>
+          </div>
         ))}
       </div>
 
