@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TaskbarProps {
   openWindows: string[];
@@ -17,6 +18,7 @@ const windowMeta: Record<string, { icon: string; label: string; shortcut: string
 };
 
 const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => {
+  const isMobile = useIsMobile();
   const [time, setTime]       = useState('');
   const [date, setDate]       = useState('');
   const [battery, setBattery] = useState(87);
@@ -48,7 +50,7 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-[90] h-12 flex items-center justify-between px-3 border-t"
+      className="fixed bottom-0 left-0 right-0 z-[90] h-12 flex items-center justify-between px-2 md:px-3 border-t"
       style={{
         background: 'rgba(4, 8, 16, 0.97)',
         backdropFilter: 'blur(28px)',
@@ -57,11 +59,11 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
       }}
     >
       {/* ── LEFT: Logo + open windows ── */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 overflow-hidden">
 
-        {/* Logo button */}
+        {/* Logo button (Hidden on very small mobile) */}
         <motion.button
-          className="flex items-center gap-2 px-3 py-1.5 mr-1.5 rounded-lg cursor-pointer relative overflow-hidden group"
+          className={`${isMobile && openWindows.length > 2 ? 'hidden' : 'flex'} items-center gap-2 px-2 md:px-3 py-1.5 mr-1 md:mr-1.5 rounded-lg cursor-pointer relative overflow-hidden group shrink-0`}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => setShowHints(h => !h)}
@@ -78,55 +80,57 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
             transition={{ duration: 2, repeat: Infinity }}
             style={{ boxShadow: '0 0 8px rgba(0,212,255,0.7)' }}
           />
-          <span className="font-mono text-xs font-bold text-os-cyan tracking-wider">OMAR OS</span>
+          {!isMobile && <span className="font-mono text-xs font-bold text-os-cyan tracking-wider">OMAR OS</span>}
         </motion.button>
 
         {/* Separator */}
-        <div className="w-px h-5 bg-os-cyan/10 mr-1" />
+        <div className={`w-px h-5 bg-os-cyan/10 mr-1 ${isMobile && openWindows.length > 2 ? 'hidden' : 'block'}`} />
 
         {/* Open windows */}
-        <AnimatePresence>
-          {openWindows.map(id => {
-            const meta = windowMeta[id] || { icon: '◻', label: id, shortcut: '' };
-            const isActive = activeWindow === id;
-            return (
-              <motion.button
-                key={id}
-                layout
-                initial={{ opacity: 0, scale: 0.8, x: -10 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.8, x: -10 }}
-                onClick={() => onWindowClick(id)}
-                whileHover={{ y: -1 }}
-                whileTap={{ scale: 0.96 }}
-                className={`relative font-mono text-[11px] px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                  isActive
-                    ? 'text-os-cyan'
-                    : 'text-os-muted hover:text-os-text'
-                }`}
-                style={{
-                  background: isActive ? 'rgba(0,212,255,0.1)' : 'transparent',
-                  border: `1px solid ${isActive ? 'rgba(0,212,255,0.25)' : 'transparent'}`,
-                  boxShadow: isActive ? '0 0 12px rgba(0,212,255,0.08)' : 'none',
-                }}
-              >
-                <span className={`text-xs ${meta.icon === '>_' ? 'font-bold font-mono' : ''}`}>
-                  {meta.icon}
-                </span>
-                <span>{meta.label}</span>
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+          <AnimatePresence>
+            {openWindows.map(id => {
+              const meta = windowMeta[id] || { icon: '◻', label: id, shortcut: '' };
+              const isActive = activeWindow === id;
+              return (
+                <motion.button
+                  key={id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.8, x: -10 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, x: -10 }}
+                  onClick={() => onWindowClick(id)}
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.96 }}
+                  className={`relative font-mono text-[11px] px-2.5 md:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shrink-0 ${
+                    isActive
+                      ? 'text-os-cyan'
+                      : 'text-os-muted hover:text-os-text'
+                  }`}
+                  style={{
+                    background: isActive ? 'rgba(0,212,255,0.1)' : 'transparent',
+                    border: `1px solid ${isActive ? 'rgba(0,212,255,0.25)' : 'transparent'}`,
+                    boxShadow: isActive ? '0 0 12px rgba(0,212,255,0.08)' : 'none',
+                  }}
+                >
+                  <span className={`text-xs ${meta.icon === '>_' ? 'font-bold font-mono' : ''}`}>
+                    {meta.icon}
+                  </span>
+                  {(!isMobile || openWindows.length <= 3) && <span>{meta.label}</span>}
 
-                {/* Active indicator */}
-                {isActive && (
-                  <motion.div
-                    layoutId="active-bar"
-                    className="absolute -bottom-px left-2 right-2 h-0.5 rounded-full"
-                    style={{ background: 'linear-gradient(90deg, transparent, #00d4ff, transparent)', boxShadow: '0 0 6px rgba(0,212,255,0.6)' }}
-                  />
-                )}
-              </motion.button>
-            );
-          })}
-        </AnimatePresence>
+                  {/* Active indicator */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-bar"
+                      className="absolute -bottom-px left-2 right-2 h-0.5 rounded-full"
+                      style={{ background: 'linear-gradient(90deg, transparent, #00d4ff, transparent)', boxShadow: '0 0 6px rgba(0,212,255,0.6)' }}
+                    />
+                  )}
+                </motion.button>
+              );
+            })}
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* ── CENTER: Keyboard hints (toggleable) ── */}
@@ -136,7 +140,7 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
-            className="absolute left-1/2 -translate-x-1/2 bottom-14 flex items-center gap-1 px-3 py-2 rounded-lg pointer-events-none"
+            className="absolute left-1/2 -translate-x-1/2 bottom-14 flex flex-wrap justify-center items-center gap-1 px-3 py-2 rounded-lg pointer-events-none w-[90%] md:w-auto"
             style={{
               background: 'rgba(4,10,20,0.95)',
               border: '1px solid rgba(0,212,255,0.1)',
@@ -163,20 +167,22 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
       </AnimatePresence>
 
       {/* ── RIGHT: System tray ── */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-1.5 md:gap-2.5 shrink-0">
 
-        {/* Online badge */}
-        <div className="flex items-center gap-1.5">
-          <motion.div
-            className="w-1.5 h-1.5 rounded-full bg-os-green"
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-            style={{ boxShadow: '0 0 6px rgba(0,255,136,0.6)' }}
-          />
-          <span className="font-mono text-[9px] text-os-muted/70 tracking-wider">ONLINE</span>
-        </div>
+        {/* Online badge (Desktop Only) */}
+        {!isMobile && (
+          <div className="flex items-center gap-1.5">
+            <motion.div
+              className="w-1.5 h-1.5 rounded-full bg-os-green"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
+              style={{ boxShadow: '0 0 6px rgba(0,255,136,0.6)' }}
+            />
+            <span className="font-mono text-[9px] text-os-muted/70 tracking-wider">ONLINE</span>
+          </div>
+        )}
 
-        <div className="w-px h-4 bg-os-cyan/8" />
+        {!isMobile && <div className="w-px h-4 bg-os-cyan/8" />}
 
         {/* WiFi */}
         <div className="flex items-center gap-1" title="Connected">
@@ -185,7 +191,7 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
             <path d="M3.5 6.5C4.2 5.8 5.1 5.5 6 5.5s1.8.3 2.5 1" stroke="rgba(0,212,255,0.5)" strokeWidth="1" strokeLinecap="round" fill="none"/>
             <path d="M1.5 4.5C2.8 3.2 4.3 2.5 6 2.5s3.2.7 4.5 2" stroke="rgba(0,212,255,0.3)" strokeWidth="1" strokeLinecap="round" fill="none"/>
           </svg>
-          <span className="font-mono text-[9px] text-os-muted/50">Cairo</span>
+          {!isMobile && <span className="font-mono text-[9px] text-os-muted/50">Cairo</span>}
         </div>
 
         <div className="w-px h-4 bg-os-cyan/8" />
@@ -194,7 +200,7 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
         <div className="flex items-center gap-1.5" title={`Battery: ${battery}%`}>
           <div className="relative flex items-center">
             <div
-              className="w-6 h-3 rounded-sm relative overflow-hidden"
+              className="w-5 md:w-6 h-2.5 md:h-3 rounded-sm relative overflow-hidden"
               style={{ border: `1px solid ${batteryColor}55` }}
             >
               <motion.div
@@ -204,17 +210,17 @@ const Taskbar = ({ openWindows, activeWindow, onWindowClick }: TaskbarProps) => 
                 style={{ background: batteryColor, opacity: 0.7 }}
               />
             </div>
-            <div className="w-0.5 h-1.5 rounded-r-sm ml-px" style={{ background: `${batteryColor}55` }} />
+            <div className="w-0.5 h-1 md:h-1.5 rounded-r-sm ml-px" style={{ background: `${batteryColor}55` }} />
           </div>
-          <span className="font-mono text-[9px]" style={{ color: batteryColor + 'aa' }}>{battery}%</span>
+          {!isMobile && <span className="font-mono text-[9px]" style={{ color: batteryColor + 'aa' }}>{battery}%</span>}
         </div>
 
         <div className="w-px h-4 bg-os-cyan/8" />
 
         {/* Clock */}
         <div className="text-right">
-          <span className="font-mono text-[11px] text-os-cyan font-medium">{time}</span>
-          <span className="font-mono text-[9px] text-os-muted/60 ml-1.5">{date}</span>
+          <span className="font-mono text-[10px] md:text-[11px] text-os-cyan font-medium">{time}</span>
+          {!isMobile && <span className="font-mono text-[9px] text-os-muted/60 ml-1.5">{date}</span>}
         </div>
       </div>
     </div>

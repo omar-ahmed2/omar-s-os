@@ -156,11 +156,11 @@ const ContactContent = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <a href="https://www.linkedin.com/in/omar-ahmed-" target="_blank" rel="noreferrer"
+                  <a href="https://www.linkedin.com/in/omarahmed2004/" target="_blank" rel="noreferrer"
                     className="flex-1 text-center text-[10px] px-3 py-2 rounded border border-os-cyan/15 text-os-cyan/70 hover:text-os-cyan hover:bg-os-cyan/8 hover:border-os-cyan/30 transition-all cursor-pointer tracking-wider">
                     LinkedIn ↗
                   </a>
-                  <a href="https://github.com/omar-ahmed" target="_blank" rel="noreferrer"
+                  <a href="https://github.com/omar-ahmed2" target="_blank" rel="noreferrer"
                     className="flex-1 text-center text-[10px] px-3 py-2 rounded border border-os-cyan/15 text-os-cyan/70 hover:text-os-cyan hover:bg-os-cyan/8 hover:border-os-cyan/30 transition-all cursor-pointer tracking-wider">
                     GitHub ↗
                   </a>

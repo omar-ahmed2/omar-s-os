@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 const projects = [
   {
     icon: '📁',
-    name: 'PORTFOLIO.DEV',
+    name: 'PORTFOLIO.OS',
     tech: ['React JS', 'Tailwind', 'Three.js', 'TypeScript'],
     desc: 'Interactive personal portfolio with 3D hero section and tabbed skill showcase. 45% increase in session duration through enhanced UI/UX.',
-    live: 'https://react-portfolio-two-dun.vercel.app/',
-    github: '#',
+    live: 'https://omar-os-portfolio.vercel.app/',
+    github: 'https://github.com/omar-ahmed2/omar-s-os',
     stats: { commits: '120+', stars: '—', status: 'LIVE' },
   },
   {
@@ -17,7 +17,7 @@ const projects = [
     tech: ['React JS', 'TypeScript', 'Supabase', 'Recharts'],
     desc: 'Personal finance platform for the MENA region featuring Gameeya & asset tracking. 40% improved financial planning efficiency. Real-time dashboards.',
     live: 'https://tatab3ny.vercel.app/',
-    github: '#',
+    github: 'https://github.com/omar-ahmed2/Tatab3ny',
     stats: { commits: '200+', stars: '—', status: 'LIVE' },
   },
   {
@@ -26,7 +26,16 @@ const projects = [
     tech: ['React JS', 'Tailwind', 'TypeScript', 'Gemini AI', 'Recharts'],
     desc: 'AI-powered career tool integrating Google Gemini. Real-time data visualization with Recharts. Supabase PostgreSQL backend.',
     live: 'https://career-sync-beta.vercel.app/',
-    github: '#',
+    github: 'https://github.com/omar-ahmed2/Career-Sync',
+    stats: { commits: '150+', stars: '—', status: 'LIVE' },
+  },
+  {
+    icon: '🤖',
+    name: 'ELKAWERA',
+    tech: ['React JS', 'Tailwind', 'TypeScript', 'Gemini AI', 'Recharts'],
+    desc: 'A website for a football academy in Egypt for making appointments and tracking performance and Events.',
+    live: 'https://elkawera.vercel.app/',
+    github: 'https://github.com/omar-ahmed2/ELKAWERA',
     stats: { commits: '150+', stars: '—', status: 'LIVE' },
   },
 ];

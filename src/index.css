@@ -152,6 +152,14 @@
   background: rgba(0, 212, 255, 0.38);
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ══════════════════════════════════════
    FONT UTILITIES
 ══════════════════════════════════════ */

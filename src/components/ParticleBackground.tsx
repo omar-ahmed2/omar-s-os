@@ -12,7 +12,8 @@ const ParticleBackground = () => {
 
     let animationId: number;
     const particles: { x: number; y: number; vx: number; vy: number; size: number }[] = [];
-    const PARTICLE_COUNT = 60;
+    const isMobileUI = window.innerWidth < 768;
+    const PARTICLE_COUNT = isMobileUI ? 30 : 60;
 
     const resize = () => {
       canvas.width = window.innerWidth;

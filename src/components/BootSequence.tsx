@@ -110,7 +110,7 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: 'brightness(1.5)' }}
           transition={{ duration: 0.5 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
           style={{ background: '#020508' }}
         >
           {/* CRT vignette */}
@@ -130,64 +130,69 @@ const BootSequence = ({ onComplete }: BootSequenceProps) => {
             Skip ▸
           </button>
 
-          <div className="font-mono text-[11px] max-w-2xl w-full px-8 relative leading-relaxed">
-            {bootLines.slice(0, visibleLines).map((line, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.12 }}
-                className="mb-px"
-              >
-                {line.isProgress ? (
-                  <div className="flex items-center gap-3 my-3">
-                    <span className="text-os-amber text-[9px] tracking-wider shrink-0">LOADING</span>
-                    <div className="flex-1 h-2 bg-os-surface/50 rounded-sm overflow-hidden border border-os-cyan/10">
-                      <motion.div
-                        className="h-full rounded-sm"
-                        style={{ background: 'linear-gradient(90deg, #00d4ff, #00ff88)' }}
-                        initial={{ width: 0 }}
-                        animate={{ width: `${progress}%` }}
-                        transition={{ duration: 0.1 }}
-                      />
-                    </div>
-                    <span className="text-os-cyan text-[9px] font-bold w-10 text-right">{progress}%</span>
-                  </div>
-                ) : line.isPkgInstall ? (
-                  <div className="my-2 space-y-px">
-                    <span className="text-os-amber text-[9px] tracking-wider">INSTALLING DEPENDENCIES</span>
-                    <div className="mt-1 grid grid-cols-2 gap-x-4 gap-y-px">
-                      {packages.slice(0, installedPkgs).map((pkg, j) => (
+          <div
+            className="font-mono text-[9px] sm:text-[11px] max-w-2xl w-full px-4 sm:px-8 relative leading-relaxed overflow-hidden"
+            style={{ transform: window.innerWidth < 640 ? 'scale(0.85)' : 'none' }}
+          >
+            <div className="overflow-x-auto no-scrollbar">
+              {bootLines.slice(0, visibleLines).map((line, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.12 }}
+                  className="mb-px whitespace-pre sm:whitespace-normal"
+                >
+                  {line.isProgress ? (
+                    <div className="flex items-center gap-3 my-3">
+                      <span className="text-os-amber text-[9px] tracking-wider shrink-0">LOADING</span>
+                      <div className="flex-1 h-2 bg-os-surface/50 rounded-sm overflow-hidden border border-os-cyan/10">
                         <motion.div
-                          key={pkg}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="flex items-center gap-1.5"
-                        >
-                          <span className="text-os-green text-[9px]">✓</span>
-                          <span className="text-os-text/50 text-[9px]">{pkg}</span>
-                        </motion.div>
-                      ))}
+                          className="h-full rounded-sm"
+                          style={{ background: 'linear-gradient(90deg, #00d4ff, #00ff88)' }}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progress}%` }}
+                          transition={{ duration: 0.1 }}
+                        />
+                      </div>
+                      <span className="text-os-cyan text-[9px] font-bold w-10 text-right">{progress}%</span>
                     </div>
-                  </div>
-                ) : (
-                  <span className={getLineStyle(line.style)}>
-                    {line.ok && <span className="text-os-green mr-1.5">✓</span>}
-                    {line.text}
-                  </span>
-                )}
-              </motion.div>
-            ))}
-
-            {visibleLines > 0 && (
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
-                className="text-os-cyan"
-              >
-                █
-              </motion.span>
-            )}
+                  ) : line.isPkgInstall ? (
+                    <div className="my-2 space-y-px">
+                      <span className="text-os-amber text-[9px] tracking-wider">INSTALLING DEPENDENCIES</span>
+                      <div className="mt-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-px">
+                        {packages.slice(0, installedPkgs).map((pkg, j) => (
+                          <motion.div
+                            key={pkg}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="flex items-center gap-1.5"
+                          >
+                            <span className="text-os-green text-[9px]">✓</span>
+                            <span className="text-os-text/50 text-[9px]">{pkg}</span>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <span className={getLineStyle(line.style)}>
+                      {line.ok && <span className="text-os-green mr-1.5">✓</span>}
+                      {line.text}
+                    </span>
+                  )}
+                </motion.div>
+              ))}
+              
+              {visibleLines > 0 && (
+                <motion.span
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
+                  className="text-os-cyan"
+                >
+                  █
+                </motion.span>
+              )}
+            </div>
           </div>
         </motion.div>
       )}

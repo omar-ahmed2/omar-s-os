@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DesktopHeroProps {
   onOpen: (id: string) => void;
@@ -17,13 +18,15 @@ const quickLinks = [
 ];
 
 const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
+  const isMobile = useIsMobile();
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.6, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="pointer-events-auto"
-      style={{ maxWidth: 460 }}
+      className="pointer-events-auto w-full px-2 md:px-0"
+      style={{ maxWidth: isMobile ? '100%' : 460 }}
     >
       {/* Glass card */}
       <div
@@ -38,13 +41,15 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
       >
         {/* Top bar */}
         <div
-          className="flex items-center gap-2 px-5 py-2.5"
+          className="flex items-center gap-2 px-4 md:px-5 py-2.5"
           style={{ background: 'rgba(3,8,18,0.6)', borderBottom: '1px solid rgba(0,212,255,0.07)' }}
         >
           <div className="w-2 h-2 rounded-full bg-[#ff5f57]" />
           <div className="w-2 h-2 rounded-full bg-[#febc2e]" />
           <div className="w-2 h-2 rounded-full bg-[#28c840]" />
-          <span className="font-mono text-[9px] text-os-cyan/30 tracking-widest ml-2">omar-os://welcome</span>
+          <span className="font-mono text-[9px] text-os-cyan/30 tracking-widest ml-2 truncate">
+            {isMobile ? 'omar-os://welcome' : 'omar-os://home/welcome'}
+          </span>
           <div className="ml-auto flex items-center gap-1.5">
             <motion.div
               className="w-1.5 h-1.5 rounded-full bg-os-green"
@@ -60,7 +65,7 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
         <div className="h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,212,255,0.35), transparent)' }} />
 
         {/* Hero content */}
-        <div className="px-6 py-6">
+        <div className="px-5 md:px-6 py-5 md:py-6">
           {/* Name area */}
           <div className="mb-5">
             <div className="flex items-center gap-2 mb-2">
@@ -68,7 +73,7 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
               <div className="flex-1 h-px" style={{ background: 'rgba(0,212,255,0.1)' }} />
             </div>
             <motion.h1
-              className="font-heading text-4xl font-bold tracking-tight"
+              className="font-heading text-3xl md:text-4xl font-bold tracking-tight"
               style={{ color: '#d8ecff', letterSpacing: '-0.01em' }}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -77,19 +82,19 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
               Omar Ahmed
             </motion.h1>
             <motion.div
-              className="flex items-center gap-2 mt-1.5"
+              className="flex items-center flex-wrap gap-2 mt-1.5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.0 }}
             >
               <span
-                className="font-mono text-sm font-medium"
+                className="font-mono text-sm font-medium whitespace-nowrap"
                 style={{ color: '#00d4ff', textShadow: '0 0 20px rgba(0,212,255,0.4)' }}
               >
                 Frontend Developer
               </span>
               <span className="font-mono text-os-muted/30 text-sm">/</span>
-              <span className="font-mono text-xs text-os-muted/60">Cairo, Egypt</span>
+              <span className="font-mono text-xs text-os-muted/60 whitespace-nowrap">Cairo, Egypt</span>
             </motion.div>
           </div>
 
@@ -116,14 +121,14 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
             {stats.map((s) => (
               <motion.div
                 key={s.label}
-                className="text-center py-2.5 rounded-xl"
+                className="text-center py-2 md:py-2.5 rounded-xl"
                 style={{
                   background: `${s.glow.replace('0.3', '0.05')}`,
                   border: `1px solid ${s.glow.replace('0.3', '0.2')}`,
                 }}
                 whileHover={{ scale: 1.04, boxShadow: `0 0 20px ${s.glow}` }}
               >
-                <p className="font-heading text-xl font-bold" style={{ color: s.color, textShadow: `0 0 16px ${s.glow}` }}>
+                <p className="font-heading text-lg md:text-xl font-bold" style={{ color: s.color, textShadow: `0 0 16px ${s.glow}` }}>
                   {s.value}
                 </p>
                 <p className="font-mono text-[8px] text-os-muted/50 tracking-widest uppercase mt-0.5">{s.label}</p>
@@ -133,7 +138,7 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
 
           {/* Quick launch buttons */}
           <motion.div
-            className="flex gap-2"
+            className="flex flex-col sm:flex-row gap-2"
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.3 }}
@@ -142,7 +147,7 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
               <motion.button
                 key={link.id}
                 onClick={() => onOpen(link.id)}
-                className="flex-1 font-mono text-[10px] py-2 rounded-lg tracking-wider transition-all cursor-pointer"
+                className="flex-1 font-mono text-[10px] py-2.5 sm:py-2 rounded-lg tracking-wider transition-all cursor-pointer"
                 style={{
                   color: link.color,
                   background: link.bg,
@@ -166,8 +171,10 @@ const DesktopHero = ({ onOpen }: DesktopHeroProps) => {
           className="flex items-center justify-between px-5 py-2"
           style={{ background: 'rgba(3,8,18,0.4)', borderTop: '1px solid rgba(0,212,255,0.05)' }}
         >
-          <span className="font-mono text-[8px] text-os-muted/30">Select apps to launch · Neural interface active</span>
-          <span className="font-mono text-[8px] text-os-cyan/25">⌥1–5</span>
+          <span className="font-mono text-[8px] text-os-muted/30 truncate mr-2">
+            {isMobile ? 'Select apps to launch' : 'Select apps to launch · Neural interface active'}
+          </span>
+          <span className="font-mono text-[8px] text-os-cyan/25 shrink-0">⌥1–5</span>
         </div>
       </div>
     </motion.div>

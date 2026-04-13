@@ -236,18 +236,25 @@ const Index = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 z-10 pointer-events-none"
-            style={{ paddingBottom: 64, paddingTop: 40, paddingLeft: 40, paddingRight: 40 }}
+            className={`fixed inset-0 z-10 pointer-events-none transition-all duration-500 ${
+              isMobile ? 'overflow-y-auto' : 'overflow-hidden'
+            }`}
+            style={{ 
+              paddingBottom: 64, 
+              paddingTop: isMobile ? 20 : 40, 
+              paddingLeft: isMobile ? 12 : 40, 
+              paddingRight: isMobile ? 12 : 40 
+            }}
           >
-            <div className="flex w-full h-full items-center justify-between pointer-events-none">
+            <div className={`flex w-full ${isMobile ? 'flex-col min-h-full py-10 gap-12' : 'h-full items-center justify-between'} pointer-events-none`}>
               
               {/* Left Side: Sidebar Launcher */}
-              <div className="pointer-events-auto shrink-0 self-start mt-8">
+              <div className={`pointer-events-auto shrink-0 ${isMobile ? 'flex justify-center' : 'self-start mt-8'}`}>
                  <AppLauncher onOpen={(id) => openWindow(id as WindowId)} />
               </div>
 
               {/* Center Area: Hero Branding */}
-              <div className="flex-1 flex items-center justify-center pointer-events-auto">
+              <div className="flex-1 flex items-center justify-center pointer-events-auto w-full">
                 <DesktopHero onOpen={(id) => openWindow(id as WindowId)} />
               </div>
 
